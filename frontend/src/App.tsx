@@ -1,18 +1,14 @@
-import { useState } from 'react'
-import { Button } from './components/ui/button'
-
 function App() {
-  const [count, setCount] = useState(0)
-
-const handleClick = () => {
-  setCount(count + 1)
+  return <div>
+    <img 
+      src="/images/logo.png"
+      style={{ 
+        pointerEvents: "none",
+        userSelect: "none"
+      }}
+      alt="Logo" 
+    />
+  </div>;
 }
 
-  return (
-<p>hello</p>
-  )
-}
-
-export default App
-
-
+export default App;
