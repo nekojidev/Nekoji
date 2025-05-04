@@ -1,5 +1,8 @@
 import mongoose from "mongoose";
 import validator from "validator";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+
 
 const userSchema = new mongoose.Schema({
   username: {
@@ -11,7 +14,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     },
   googleId : {
-    tupe: String,
+    type: String,
     unique: true,
     sparse: true,
   },
@@ -34,6 +37,10 @@ const userSchema = new mongoose.Schema({
   avatar: {
     type: String,
     default: 'https://example.com/default-avatar.png', 
+  },
+  isAdmin: {
+    type: Boolean,
+    default: false,
   }
 
 },{
@@ -52,4 +59,21 @@ userSchema.pre('save', async function (next) {
   next()
 })
 
-export default User = mongoose.model('User', userSchema)
+userSchema.methods.matchPassword = async function (enteredPassword) {
+  return await bcrypt.compare(enteredPassword, this.password)
+}
+userSchema.methods.generateToken = function () {
+  return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
+    expiresIn: '30d',
+  })
+}
+userSchema.methods.generateAvatar = function () {
+  return `https://api.dicebear.com/5.x/initials/svg?seed=${this.username}`
+}
+
+
+
+
+
+const User = mongoose.model('User', userSchema)
+export default User

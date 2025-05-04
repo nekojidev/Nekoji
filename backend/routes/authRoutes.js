@@ -1,5 +1,5 @@
 import express from 'express';
-import {registerUser, loginUser, getUserProfile } from '../controllers/authController.js';
+import {registerUser, loginUser, getUserProfile, logoutUser } from '../controllers/authController.js';
 import {googleAuthCallback, telegramAuthCallback, authFailure } from '../controllers/socialAuthController.js'
 import {protect} from '../middleware/authMiddleware.js';
 import passport from 'passport';
@@ -22,8 +22,10 @@ router.post('/login', [
 loginUser
 )
 
+router.post('/logout', logoutUser)
+
 router.get('/profile', protect, getUserProfile)
-router.get('/google', passport.authenticate('google', {scope: ['profile' , 'email']} ))
+router.get('/google', passport.authenticate('google', {scope: ['profile', 'email']}))
 
 router.get('/google/callback', passport.authenticate('google', { failureRedirect: '/api/v1/auth/failure' }), googleAuthCallback )
 

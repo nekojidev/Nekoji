@@ -1,23 +1,24 @@
 import GoogleStrategy from './googleStrategy.js';
-import TelegramStrategy from './telegramStrategy.js';
+// import TelegramStrategy from './telegramStrategy.js';
 import User from '../models/User.model.js'
 
 const setupPassport = (passport) => {
+
 passport.serializeUser((user, done) => {
-  done(null, user)
+  done(null, user.id)
 })
 
-passport.deserializeUser(async (user, done) => {
+passport.deserializeUser(async (id, done) => {
   try {
-    const userData = await User.findById(user._id)
-    done(null, user)
-  } catch (error) {
-    done(error, null)
+    const user = await User.findById(id);
+    done(null, user);
+  } catch (err) {
+    done(err, null);
   }
-})
+});
 
 passport.use(GoogleStrategy);
-passport.use(TelegramStrategy);
+// passport.use(TelegramStrategy);
 
 // may be add other strategies here
 

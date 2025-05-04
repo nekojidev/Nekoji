@@ -1,16 +1,26 @@
-import dotenv from 'dotenv';
-import express from 'express';
-dotenv.config();
+import 'dotenv/config.js';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
+
+import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
 import session from 'express-session';
 import passport from 'passport'
+import { ExpressValidator } from 'express-validator';
 
 import connectDB from './config/db.js';
 import logger from './utils/logger.js';
 import errorMiddleware from './middleware/errorMiddleware.js';
-// import setupPassport from './auth/passportConfig.js';
+import setupPassport from './auth/passportConfig.js';
+
+
+import authRoutes from './routes/authRoutes.js';
+// import favoriteRoutes from './routes/favoritesRoutes.js';
+// import viewedRoutes from './routes/viewedRoutes.js';
+// import userRoutes from './routes/userRoutes.js';
+// import animeRoutes from './routes/animeRoutes.js';
 
 const app = express();
 
@@ -28,20 +38,15 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session())
 
+setupPassport(passport);
 
-// setupPassport(passport);
 
 app.get('/api/v1', (req, res) => {
   res.send('Nekoji server is running');
 })
 
-// const authRoutes = import('./routes/authRoutes.js');
-// const favoriteRoutes = import('./routes/favoritesRoutes.js');
-// const viewedRoutes = import('./routes/viewedRoutes.js');
-// const userRoutes = import('./routes/userRoutes.js');
-// const animeRoutes = import('./routes/animalRoutes.js');
 
-// app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/auth', authRoutes);
 // app.use('/api/v1/favorites', favoriteRoutes);
 // app.use('/api/v1/user', userRoutes);
 // app.use('/api/v1/viewed', viewedRoutes);

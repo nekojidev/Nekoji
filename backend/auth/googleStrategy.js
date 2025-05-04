@@ -1,6 +1,8 @@
+
 import {Strategy as GoogleOAuth20Strategy} from 'passport-google-oauth20';
 import User from '../models/User.model.js';
 import logger from '../utils/logger.js';
+
 
 const googleStrategy = new GoogleOAuth20Strategy({
   clientID: process.env.GOOGLE_CLIENT_ID,
@@ -15,7 +17,8 @@ const googleStrategy = new GoogleOAuth20Strategy({
         logger.info(`User found with Google ID: ${profile.id} `)
         done(null, user)
       } else {
-        logger.info('Creating new user with Google Id: ${profile.id')
+        // Fix: Changed single quotes to backticks for template string
+        logger.info(`Creating new user with Google Id: ${profile.id}`)
         const newUser = await User.create({
           googleId: profile.id,
           username: profile.displayName,
