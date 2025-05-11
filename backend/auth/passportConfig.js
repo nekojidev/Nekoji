@@ -1,5 +1,5 @@
 import GoogleStrategy from './googleStrategy.js';
-// import TelegramStrategy from './telegramStrategy.js';
+import telegramStrategy from './telegramStrategy.js';
 import User from '../models/User.model.js'
 
 const setupPassport = (passport) => {
@@ -18,8 +18,7 @@ passport.deserializeUser(async (id, done) => {
 });
 
 passport.use(GoogleStrategy);
-// passport.use(TelegramStrategy);
-
+passport.use(telegramStrategy);
 // may be add other strategies here
 
 }

@@ -1,6 +1,5 @@
-import jwt from 'jsonwebtoken';
+
 import logger from '../utils/logger.js';
-import User from '../models/User.model.js'
 
 const googleAuthCallback = (req, res) => {
  const user = req.user;

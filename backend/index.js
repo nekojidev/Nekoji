@@ -21,6 +21,7 @@ import authRoutes from './routes/authRoutes.js';
 // import viewedRoutes from './routes/viewedRoutes.js';
 // import userRoutes from './routes/userRoutes.js';
 // import animeRoutes from './routes/animeRoutes.js';
+import syncRoutes from './routes/syncRoutes.js';
 
 const app = express();
 
@@ -51,6 +52,7 @@ app.use('/api/v1/auth', authRoutes);
 // app.use('/api/v1/user', userRoutes);
 // app.use('/api/v1/viewed', viewedRoutes);
 // app.use('/api/v1/anime', animeRoutes);
+app.use('/api/v1/sync', syncRoutes);
 
 app.use(errorMiddleware)
 

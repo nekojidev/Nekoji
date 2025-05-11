@@ -29,6 +29,9 @@ router.get('/google', passport.authenticate('google', {scope: ['profile', 'email
 
 router.get('/google/callback', passport.authenticate('google', { failureRedirect: '/api/v1/auth/failure' }), googleAuthCallback )
 
+// Initiates Telegram login
+router.get('/telegram', passport.authenticate('telegram'));
+
 router.get('/telegram/callback', passport.authenticate('telegram', {failureRedirect: '/api/v1/auth/failure'}), telegramAuthCallback)
 
 router.get('/failure', authFailure)

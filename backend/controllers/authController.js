@@ -1,13 +1,24 @@
 import User from '../models/User.model.js'
 import asyncHandler from 'express-async-handler'
 import logger from '../utils/logger.js'
+import { validationResult } from 'express-validator'
 
 
 
 
 const registerUser = asyncHandler(async (req, res) => {
+  // Add validation result check
+  const errors = validationResult(req)
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() })
+  }
 
   const {username, email, password} = req.body
+  
+  // if(!username || !email || !password){
+  //   res.status(400)
+  //   throw new Error('Please provide all fields')
+  // }
 
   const userExist = await User.findOne({$or: [{username}, {email}]})
   if(userExist){
@@ -49,6 +60,12 @@ const registerUser = asyncHandler(async (req, res) => {
 })
 
 const loginUser = asyncHandler(async (req, res) => {
+  // Add validation result check
+  const errors = validationResult(req)
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() })
+  }
+
   const {email, password} = req.body;
 
   if(!email || !password){
@@ -86,7 +103,6 @@ const loginUser = asyncHandler(async (req, res) => {
 
 const getUserProfile = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id).select('-password')
-
   if(user){
     res.json({
       _id: user._id,

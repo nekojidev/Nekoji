@@ -1,13 +1,16 @@
-
 import {Strategy as TelegramStrategy} from 'passport-telegram';
 import User from '../models/User.model.js'
 import logger from '../utils/logger.js';
 
+// const telegramStrategy = () => {}
+// console.log(process.env.TELEGRAM_BOT_TOKEN)
+
 const telegramStrategy = new TelegramStrategy({
+  clientID: process.env.TELEGRAM_BOT_USERNAME,
   botToken: process.env.TELEGRAM_BOT_TOKEN,
   passReqToCallback: true,
 },
-async (req, document, profile) => {
+async (req, profile, done) => {
   try {
     let user = await User.findOne({telegramId: profile.id})
 

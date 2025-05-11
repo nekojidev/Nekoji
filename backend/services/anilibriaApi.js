@@ -1,6 +1,5 @@
 import axios from 'axios';
-import logger from '../utils/logger';
-import { log } from 'winston';
+import logger from '../utils/logger.js';
 
 const ANILIBRIA_API_URL = process.env.ANILIBRIA_API_URL;
 
@@ -11,11 +10,11 @@ if(!ANILIBRIA_API_URL){
 
 const api = axios.create({
   baseURL: ANILIBRIA_API_URL,
-  timeout: 15000,
+  // timeout: 15000,
 });
 
 
-const getPopularAnime = async (page = 1, itemsPerPage = 24) => {
+const getPopularAnime = async (page = 1, itemsPerPage = 50) => {
   try {
     const response = await api.get('/title/updates' , {
       params: {
@@ -48,19 +47,21 @@ const searchAnime = async (searchParams) => {
 
 const getAnimeDetails = async (animeId) => {
   try {
-  const response = await api.get('/title', {
-    params: {
-      id: animeId
-    }
-  })   
+    const response = await api.get('/title', {
+      params: {
+        id: animeId
+      }
+    });
+    // console.log(response.data)
+    // console.log(response.data)
+    // This is where it returns null if response.data is empty
+    if(response.data  ){
+      logger.info(`Fetched anime details from Anilibria API (ID: ${animeId})`);
 
-  if(response.data && response.data.length > 0){
-    logger.info(`Fetched anime details from Anilibria API (ID: ${animeId})`)
-    return response.data[0]
-  } else {
-    logger.warn(`Anime details not found for ID: ${animeId} `)
-    return null
-  }
+      return response.data
+    } else {
+      logger.warn(`Anime details not found for ID: ${animeId} `);
+    }
 
   } catch (error) {
     logger.error(`Error fetching anime details from Anilibria API: ${error.message}`);
